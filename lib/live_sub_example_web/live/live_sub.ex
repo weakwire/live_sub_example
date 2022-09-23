@@ -74,7 +74,7 @@ defmodule LiveSub do
       defmodule LiveSubExampleWeb.PeopleComponent do
         ....
         #This will be called when `SubHelper.pub_person_added` is called from a component
-        def sub_people_added(person, socket) do
+        def sub_person_added(person, socket) do
           socket |> assign(:person, person)
         end
 
