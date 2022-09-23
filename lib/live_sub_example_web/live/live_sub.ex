@@ -80,7 +80,7 @@ defmodule LiveSub do
 
 
 
-  A LiveComponent can `omit` & `subscribe_to` to the same topic thus it can send messages to itself.
+  A LiveComponent can `emit` & `subscribe_to` to the same topic thus it can send messages to itself.
   This is useful for async calls.
 
         defmodule LiveSubExampleWeb.PeopleComponent do
