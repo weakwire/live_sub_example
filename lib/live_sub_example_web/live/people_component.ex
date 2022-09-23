@@ -7,7 +7,7 @@ defmodule LiveSubExampleWeb.PeopleComponent do
       "person_added",
       "people_loaded"
     ],
-    omits: [
+    emits: [
       "people_loaded"
     ]
 
@@ -24,7 +24,7 @@ defmodule LiveSubExampleWeb.PeopleComponent do
     pid = self()
 
     Task.start(fn ->
-      # `SubHelper.pub_people_loaded` is generated as omits: people_loaded is defined.
+      # `SubHelper.pub_people_loaded` is generated as emits: people_loaded is defined.
       # It informs the liveview of the loaded people.
       # pid is the LiveView pid as we are using a task here to load data on mount
       SubHelper.pub_people_loaded(Database.load_people(), pid)

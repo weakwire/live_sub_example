@@ -38,21 +38,21 @@ defmodule LiveSub do
                 "person_added",
                 "people_loaded"
               ],
-              omits: [
+              emits: [
                 "people_loaded"
               ]
 
       `subscribe_to` defines the topics the LiveComponent will be listen to
 
-      `omits` defines the topics the LiveComponent will emit to other LiveCompoments
+      `emits` defines the topics the LiveComponent will emit to other LiveCompoments
 
   ### Send messages
 
-  When you define topics in `omits` parameter, `LiveSub` generates helper functions in your `LiveComponent`
+  When you define topics in `emits` parameter, `LiveSub` generates helper functions in your `LiveComponent`
   to publish messages.
 
   For example
-      omits: [ "people_loaded" ]
+      emits: [ "people_loaded" ]
 
   generates `SubHelper.pub_person_added/1` that publishes data (as its argument) to the
   topic `"people_loaded"`
@@ -120,7 +120,7 @@ defmodule LiveSub do
     defmacro __using__(opts) do
       quote location: :keep, bind_quoted: [opts: opts] do
         subscribed_topics = Keyword.get(opts, :subscribe_to) || []
-        omits_topics = Keyword.get(opts, :omits) || []
+        emits_topics = Keyword.get(opts, :emits) || []
         replace_initial_update = Keyword.get(opts, :replace_initial_update, true)
 
         def update(%{id: id, init: true} = assigns, socket) do
@@ -142,15 +142,15 @@ defmodule LiveSub do
 
           ## Generate all pub_ helper functions in test environment
           if Mix.env() == :test do
-            for omits <- (omits_topics ++ subscribed_topics) |> Enum.uniq() do
-              def unquote(:"pub_#{omits}")(data, pid \\ self()) do
-                send(pid, %{lib: :live_sub, topic: unquote(omits), data: data})
+            for emits <- (emits_topics ++ subscribed_topics) |> Enum.uniq() do
+              def unquote(:"pub_#{emits}")(data, pid \\ self()) do
+                send(pid, %{lib: :live_sub, topic: unquote(emits), data: data})
               end
             end
           else
-            for omits <- omits_topics do
-              def unquote(:"pub_#{omits}")(data, pid \\ self()) do
-                send(pid, %{lib: :live_sub, topic: unquote(omits), data: data})
+            for emits <- emits_topics do
+              def unquote(:"pub_#{emits}")(data, pid \\ self()) do
+                send(pid, %{lib: :live_sub, topic: unquote(emits), data: data})
               end
             end
           end

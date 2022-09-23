@@ -4,7 +4,7 @@ defmodule LiveSubExampleWeb.AddPersonComponent do
 
   # subscribe to the liveview topic "PersonAdded"
   use LiveSub.LiveComponent,
-    omits: [
+    emits: [
       "person_added"
     ]
 
@@ -28,7 +28,7 @@ defmodule LiveSubExampleWeb.AddPersonComponent do
     # Database.insert....
 
     # Inform the Liveview that a new person is added on the appropriate topic
-    # A helper function is generated based on the `omits` param
+    # A helper function is generated based on the `emits` param
     SubHelper.pub_person_added(socket.assigns.person)
 
     {:noreply, socket}
